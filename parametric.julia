@@ -16,8 +16,8 @@ magic_complexity = rms_of_matrix(magic .* limit11)
 
 V = fill(1, size(marvel)[2])
 
-optimal_badness(W) = rms_of_matrix(W - W * fill(1 / size(W)[2], size(W)[2], size(W)[2]))
+optimal_badness(W) = rms_of_matrix(W - sum(W, dims=2) * fill(1 / size(W)[2], 1, size(W)[2]))
 magic_badness = optimal_badness(magic .* limit11)
 marvel_badness = optimal_badness(marvel_w)
 
-cangwu(ε, W) = rms_of_matrix(W - (1 - ε) * W * fill(1 / size(W)[2], size(W)[2], size(W)[2]))
+cangwu(ε, W) = rms_of_matrix(W - (1 - ε) * sum(W, dims=2) * fill(1 / size(W)[2], 1, size(W)[2]))
