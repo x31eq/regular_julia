@@ -1,0 +1,23 @@
+marvel = [22 35 51 62 76; 31 49 72 87 107; 41 65 95 115 142]
+
+using LinearAlgebra
+
+primes11 = [2; 3; 5; 7; 11]
+limit11 = [1/log2(2) 1/log2(3) 1/log2(5) 1/log2(7) 1/log2(11)]
+
+marvel_w = marvel .* limit11
+
+rms_of_matrix(W) = √det(W * transpose(W) / size(W)[2])
+
+complexity = rms_of_matrix(marvel_w)
+
+magic = [22 35 51 62 76; 41 65 95 115 142]
+magic_complexity = rms_of_matrix(magic .* limit11)
+
+V = fill(1, size(marvel)[2])
+
+optimal_badness(W) = rms_of_matrix(W - W * fill(1 / size(W)[2], size(W)[2], size(W)[2]))
+magic_badness = optimal_badness(magic .* limit11)
+marvel_badness = optimal_badness(marvel_w)
+
+cangwu(ε, W) = rms_of_matrix(W - (1 - ε) * W * fill(1 / size(W)[2], size(W)[2], size(W)[2]))
