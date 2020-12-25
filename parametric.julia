@@ -1,13 +1,14 @@
-marvel = [22 35 51 62 76; 31 49 72 87 107; 41 65 95 115 142]
-
 using LinearAlgebra
 
-primes11 = [2; 3; 5; 7; 11]
-limit11 = [1/log2(2) 1/log2(3) 1/log2(5) 1/log2(7) 1/log2(11)]
+primes11 = [2 3 5 7 11]
+buoy(n) = 1 / log2(n)
+limit11 = buoy.(primes11)
 
 rms_of_matrix(W) = √det(W * transpose(W) / size(W)[2])
 
+marvel = [22 35 51 62 76; 31 49 72 87 107; 41 65 95 115 142]
 magic = [22 35 51 62 76; 41 65 95 115 142]
+
 println("Magic complexity ", rms_of_matrix(magic .* limit11))
 println("Marvel complexity ", rms_of_matrix(marvel .* limit11))
 
