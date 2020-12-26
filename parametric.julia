@@ -1,15 +1,15 @@
 using LinearAlgebra
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
-limit11 = transpose([1/log2(n) for n ∈ Iterators.take(primes, 5)])
+limit11 = transpose(log2.(Iterators.take(primes, 5)))
 
 rms_of_matrix(W) = √det(W * transpose(W) / size(W)[2])
 
 marvel = [22 35 51 62 76; 31 49 72 87 107; 41 65 95 115 142]
 magic = [22 35 51 62 76; 41 65 95 115 142]
 
-println("Magic complexity ", rms_of_matrix(magic .* limit11))
-println("Marvel complexity ", rms_of_matrix(marvel .* limit11))
+println("Magic complexity ", rms_of_matrix(magic ./ limit11))
+println("Marvel complexity ", rms_of_matrix(marvel ./ limit11))
 
 function optimal_badness(M)
     n_primes = size(M)[2]
@@ -17,8 +17,8 @@ function optimal_badness(M)
     rms_of_matrix(M - MV / n_primes)
 end
 
-println("Magic badness ", optimal_badness(magic .* limit11))
-println("Marvel badness ", optimal_badness(marvel .* limit11))
+println("Magic badness ", optimal_badness(magic ./ limit11))
+println("Marvel badness ", optimal_badness(marvel ./ limit11))
 
 function cangwu(ε, M)
     n_primes = size(M)[2]
@@ -26,17 +26,17 @@ function cangwu(ε, M)
     rms_of_matrix(M - (1 - ε) / n_primes * MV)
 end
 
-println("Magic 1-cent badness ", cangwu(1/1200, magic .* limit11))
-println("Marvel 1-cent badness ", cangwu(1/1200, marvel .* limit11))
+println("Magic 1-cent badness ", cangwu(1/1200, magic ./ limit11))
+println("Marvel 1-cent badness ", cangwu(1/1200, marvel ./ limit11))
 
 
-te_complexity(M, limit) = rms_of_matrix(M .* limit)
+te_complexity(M, limit) = rms_of_matrix(M ./ limit)
 println("Magic complexity ", te_complexity(magic, limit11))
 println("Marvel complexity ", te_complexity(marvel, limit11))
 
 function cangwu(ε, M, limit)
     n_primes = length(limit)
-    M = M .* limit
+    M = M ./ limit
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - (1 - ε) / n_primes * MV)
 end
