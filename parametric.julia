@@ -1,6 +1,6 @@
 using LinearAlgebra
 
-primes = [2 3 5 7 11 13 17 19 23 29 31]
+const primes = [2 3 5 7 11 13 17 19 23 29 31]
 limit11 = transpose([1/log2(n) for n ∈ Iterators.take(primes, 5)])
 
 rms_of_matrix(W) = √det(W * transpose(W) / size(W)[2])
