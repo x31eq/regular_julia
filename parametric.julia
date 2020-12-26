@@ -29,3 +29,20 @@ end
 
 println("Magic 1-cent badness ", cangwu(1/1200, magic .* limit11))
 println("Marvel 1-cent badness ", cangwu(1/1200, marvel .* limit11))
+
+
+te_complexity(M, limit) = rms_of_matrix(M .* limit)
+println("Magic complexity ", te_complexity(magic, limit11))
+println("Marvel complexity ", te_complexity(marvel, limit11))
+
+function cangwu(ε, M, limit)
+    n_primes = length(limit)
+    M = M .* limit
+    MV = repeat(sum(M, dims=2), 1, n_primes)
+    rms_of_matrix(M - (1 - ε) / n_primes * MV)
+end
+
+println("Magic badness ", cangwu(0, magic, limit11))
+println("Marvel badness ", cangwu(0, marvel, limit11))
+println("Magic 1-cent badness ", cangwu(1/1200, magic, limit11))
+println("Marvel 1-cent badness ", cangwu(1/1200, marvel, limit11))
