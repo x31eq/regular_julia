@@ -1,8 +1,7 @@
 using LinearAlgebra
 
 primes = [2 3 5 7 11 13 17 19 23 29 31]
-buoy(n) = 1 / log2(n)
-limit11 = transpose(buoy.(Iterators.take(primes, 5)))
+limit11 = transpose((n -> 1/log2(n)).(Iterators.take(primes, 5)))
 
 rms_of_matrix(W) = √det(W * transpose(W) / size(W)[2])
 
