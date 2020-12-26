@@ -3,7 +3,7 @@ using LinearAlgebra
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
 limit11 = transpose(log2.(Iterators.take(primes, 5)))
 
-rms_of_matrix(W) = prod(svdvals(W)) / size(W)[2] ^ (size(W)[1] / 2)
+rms_of_matrix(W) = prod(svdvals(W)) / size(W, 2) ^ (size(W, 1) / 2)
 
 marvel = [22 35 51 62 76; 31 49 72 87 107; 41 65 95 115 142]
 magic = [22 35 51 62 76; 41 65 95 115 142]
@@ -12,7 +12,7 @@ println("Magic complexity ", rms_of_matrix(magic ./ limit11))
 println("Marvel complexity ", rms_of_matrix(marvel ./ limit11))
 
 function optimal_badness(M)
-    n_primes = size(M)[2]
+    n_primes = size(M, 2)
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - MV / n_primes)
 end
@@ -21,7 +21,7 @@ println("Magic badness ", optimal_badness(magic ./ limit11))
 println("Marvel badness ", optimal_badness(marvel ./ limit11))
 
 function cangwu(ε, M)
-    n_primes = size(M)[2]
+    n_primes = size(M, 2)
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - (1 - ε) / n_primes * MV)
 end
