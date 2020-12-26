@@ -12,10 +12,20 @@ magic = [22 35 51 62 76; 41 65 95 115 142]
 println("Magic complexity ", rms_of_matrix(magic .* limit11))
 println("Marvel complexity ", rms_of_matrix(marvel .* limit11))
 
-optimal_badness(W) = rms_of_matrix(W - repeat(sum(W, dims=2), 1, size(W)[2]) / size(W)[2])
+function optimal_badness(M)
+    n_primes = size(M)[2]
+    MV = repeat(sum(M, dims=2), 1, n_primes)
+    rms_of_matrix(M - MV / n_primes)
+end
+
 println("Magic badness ", optimal_badness(magic .* limit11))
 println("Marvel badness ", optimal_badness(marvel .* limit11))
 
-cangwu(ε, W) = rms_of_matrix(W - (1 - ε) / size(W)[2] * repeat(sum(W, dims=2), 1, size(W)[2]))
+function cangwu(ε, M)
+    n_primes = size(M)[2]
+    MV = repeat(sum(M, dims=2), 1, n_primes)
+    rms_of_matrix(M - (1 - ε) / n_primes * MV)
+end
+
 println("Magic 1-cent badness ", cangwu(1/1200, magic .* limit11))
 println("Marvel 1-cent badness ", cangwu(1/1200, marvel .* limit11))
