@@ -40,10 +40,6 @@ te_complexity(M, limit) = rms_of_matrix(M ./ limit)
 # Equal temperament finding
 #
 
-function intrange(x, y)
-    [x for x in Int64(ceil(x)):Int64(floor(y))]
-end
-
 function limited_mappings(n_notes, ek, bmax, plimit)
     cap = bmax^2 * length(plimit) / plimit[1]^2
     # convert from ek form to ε² form
@@ -83,6 +79,10 @@ function limited_mappings(n_notes, ek, bmax, plimit)
 
     mappings = more_limited_mappings(Int64[n_notes], 0.0, 0.0)
     [mappings[:,i] for i ∈ 1:size(mappings, 2)]
+end
+
+function intrange(x, y)
+    [x for x in Int64(ceil(x)):Int64(floor(y))]
 end
 
 end
