@@ -1,7 +1,8 @@
 using LinearAlgebra
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
-limit11 = log2.(primes[:, 1:5])
+
+limit(n) = log2.(transpose(primes[primes .<= n]))
 
 rms_of_matrix(W) = prod(svdvals(W)) / size(W, 2) ^ (size(W, 1) / 2)
 
