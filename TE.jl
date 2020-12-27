@@ -2,6 +2,8 @@ module TE
 
 using LinearAlgebra
 
+export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
+
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
 
 limit(n) = log2.(transpose(primes[primes .<= n]))
