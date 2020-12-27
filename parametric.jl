@@ -21,3 +21,6 @@ println("Magic badness ", cangwu(0, magic, limit11))
 println("Marvel badness ", cangwu(0, marvel, limit11))
 println("Magic 1-cent badness ", cangwu(1/1200, magic, limit11))
 println("Marvel 1-cent badness ", cangwu(1/1200, marvel, limit11))
+
+println(limited_mappings(12, 0.01, 0.3, limit(5)))
+println(limited_mappings(31, 0.01, 0.35, limit(11)))
