@@ -81,7 +81,8 @@ function limited_mappings(n_notes, ek, bmax, plimit)
         result
     end
 
-    more_limited_mappings(Int64[n_notes], 0.0, 0.0)
+    mappings = more_limited_mappings(Int64[n_notes], 0.0, 0.0)
+    [mappings[:,i] for i ∈ 1:size(mappings, 2)]
 end
 
 end
