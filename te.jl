@@ -4,7 +4,7 @@ const primes = [2 3 5 7 11 13 17 19 23 29 31]
 
 limit(n) = log2.(transpose(primes[primes .<= n]))
 
-rms_of_matrix(W) = prod(svdvals(W)) / size(W, 2) ^ (size(W, 1) / 2)
+rms_of_matrix(W) = prod(svdvals(W / √size(W, 2)))
 
 function optimal_badness(M)
     n_primes = size(M, 2)
