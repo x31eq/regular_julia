@@ -1,3 +1,5 @@
+module TE
+
 using LinearAlgebra
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
@@ -26,3 +28,5 @@ function cangwu(ε, M, limit)
 end
 
 te_complexity(M, limit) = rms_of_matrix(M ./ limit)
+
+end
