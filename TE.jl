@@ -59,7 +59,7 @@ function get_equal_temperaments(plimit, ek, n_results)
         results = vcat(results, [prime_et(plimit, i)])
     end
     sort!(results, by=badness)
-    bmax = badness(results[10])
+    bmax = badness(results[n_results])
 
     n_notes = 1
     results = Int64[]
