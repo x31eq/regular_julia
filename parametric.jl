@@ -27,6 +27,7 @@ let plimit = limit(5)
     sort!(mappings, by=m -> cangwu(1/1200, m, plimit))
     println(mappings)
 end
+println(limited_mappings(12, 0.01, 0.1, limit(7)))
 let plimit = limit(11)
     mappings = limited_mappings(31, 0.01, 0.35, plimit)
     sort!(mappings, by=m -> cangwu(1/1200, m, plimit))

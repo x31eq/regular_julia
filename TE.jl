@@ -136,9 +136,9 @@ function limited_mappings(n_notes, ek, bmax, plimit)
     mappings = more_limited_mappings(Int64[n_notes], 0.0, 0.0)
     if mappings == []
         # Transpose of an empty array gives a single element
-        mappings
+        Array{Array{Int64,2},1}()
     else
-        [transpose(mappings[:,i]) for i ∈ 1:size(mappings, 2)]
+        [collect(transpose(mappings[:,i])) for i ∈ 1:size(mappings, 2)]
     end
 end
 
