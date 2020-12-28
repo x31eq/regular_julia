@@ -17,8 +17,8 @@ println("Marvel 1-cent badness ", cangwu(1/1200, marvel ./ limit11))
 println("Magic complexity ", te_complexity(magic, limit11))
 println("Marvel complexity ", te_complexity(marvel, limit11))
 
-println("Magic badness ", cangwu(0, magic, limit11))
-println("Marvel badness ", cangwu(0, marvel, limit11))
+println("Magic badness ", cangwu(0.0, magic, limit11))
+println("Marvel badness ", cangwu(0.0, marvel, limit11))
 println("Magic 1-cent badness ", cangwu(1/1200, magic, limit11))
 println("Marvel 1-cent badness ", cangwu(1/1200, marvel, limit11))
 

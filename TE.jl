@@ -6,49 +6,52 @@ export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
 export best_et, get_equal_temperaments, limited_mappings
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
-const MappingList = Array{Array{Int64,2},1}
+const MappingArray = Array{Int64,2}
+const TuningArray = Array{Float64,2}
+const MappingList = Array{MappingArray,1}
 
-limit(n) = log2.(transpose(primes[primes .≤ n]))
+limit(n::Int64)::TuningArray = log2.(transpose(primes[primes .≤ n]))
 
 #
 # Calculations on known mappings
 #
 
-rms_of_matrix(W) = prod(svdvals(W / √size(W, 2)))
+rms_of_matrix(W::TuningArray)::Float64 = prod(svdvals(W / √size(W, 2)))
 
-function optimal_badness(M)
+function optimal_badness(M::TuningArray)::Float64
     n_primes = size(M, 2)
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - MV / n_primes)
 end
 
-function optimal_badness(M, limit)
+function optimal_badness(M::MappingArray, limit::TuningArray)::Float64
     n_primes = length(limit)
     M = M ./ limit
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - MV / n_primes)
 end
 
-function cangwu(ε, M)
+function cangwu(ε::Float64, M::TuningArray)::Float64
     n_primes = size(M, 2)
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - (1 - ε) / n_primes * MV)
 end
 
-function cangwu(ε, M, limit)
+function cangwu(ε::Float64, M::MappingArray, limit::TuningArray)::Float64
     n_primes = length(limit)
     M = M ./ limit
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - (1 - ε) / n_primes * MV)
 end
 
-te_complexity(M, limit) = rms_of_matrix(M ./ limit)
+te_complexity(M::MappingArray, limit::TuningArray) = rms_of_matrix(M ./ limit)
 
 #
 # Equal temperament finding
 #
 
-function get_equal_temperaments(plimit, ek, n_results)
+function get_equal_temperaments(
+        plimit::TuningArray, ek::Float64, n_results::Int64)::MappingList
     # Goofy but reliable rule for nonoctave limits
     plimit = plimit ./ plimit[1]
 
@@ -79,7 +82,7 @@ function get_equal_temperaments(plimit, ek, n_results)
     results
 end
 
-function best_et(plimit, n_notes)
+function best_et(plimit::TuningArray, n_notes::Int64)::MappingArray
     pet = prime_et(plimit, n_notes)
     cap = optimal_badness(pet, plimit)
     mappings = limited_mappings(n_notes, 0.0, cap, plimit)
@@ -91,14 +94,18 @@ function best_et(plimit, n_notes)
     end
 end
 
-prime_et(plimit, n_notes) = [Int64(round(n_notes * x)) for x in plimit]
+prime_et(plimit::TuningArray, n_notes::Int64)::MappingArray =
+    [Int64(round(n_notes * x)) for x in plimit]
 
-function limited_mappings(n_notes, ek, bmax, plimit)
+function limited_mappings(
+        n_notes::Int64, ek::Float64, bmax::Float64, plimit::TuningArray,
+        )::MappingList
     cap = bmax^2 * length(plimit) / plimit[1]^2
     # convert from ek form to ε² form
     ε² = ek^2 / (1.0 + ek^2)
 
-    function more_limited_mappings(mapping, tot, tot²)
+    function more_limited_mappings(
+            mapping::MappingArray, tot::Float64, tot²::Float64)::MappingList
         i = length(mapping)
         if i == length(plimit)
             return [mapping]
@@ -127,11 +134,10 @@ function limited_mappings(n_notes, ek, bmax, plimit)
         result
     end
 
-    more_limited_mappings(Int64[n_notes], 0.0, 0.0)
+    more_limited_mappings(reshape([n_notes], (1, 1)), 0.0, 0.0)
 end
 
-function intrange(x, y)
+intrange(x::Float64, y::Float64)::Array{Int64,1} =
     [x for x in Int64(ceil(x)):Int64(floor(y))]
-end
 
 end
