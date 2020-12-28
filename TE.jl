@@ -62,15 +62,11 @@ function get_equal_temperaments(plimit, ek, n_results)
     bmax = badness(results[n_results])
 
     n_notes = 1
-    results = Int64[]
+    results = Array{Array{Int64,2},1}()
     while n_notes ≤ bmax/ek
         mappings = limited_mappings(n_notes, ek, bmax, plimit)
         if mappings ≠ []
-            if results == []
-                results = mappings
-            else
-                results = vcat(results, mappings)
-            end
+            results = vcat(results, mappings)
             sort!(results, by=badness)
             if length(results) ≥ n_results
                 results = results[1:n_results]
