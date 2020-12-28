@@ -103,43 +103,34 @@ function limited_mappings(n_notes, ek, bmax, plimit)
 
     function more_limited_mappings(mapping, tot, tot²)
         i = length(mapping)
+        if i == length(plimit)
+            return [mapping]
+        end
         weighted_size = mapping[end] / plimit[i]
         tot += weighted_size
         tot² += weighted_size^2
         λ = 1 - ε²
-        if i == length(plimit)
-            return mapping
-        end
 
+        result = Array{Array{Int64,2},1}()
         toti = tot * λ / (i + ε²)
         error² = tot² - tot * toti
         if error² ≥ cap
-            return Int64[]
+            return result
         end
         target = plimit[i + 1]
         deficit = √((i+1) * (cap-error²) / (i + ε²))
         xmin = target * (toti - deficit)
         xmax = target * (toti + deficit)
 
-        result = Int64[]
+        result = Array{Array{Int64,2},1}()
         for guess in intrange(xmin, xmax)
-            more = more_limited_mappings(vcat(mapping, [guess]), tot, tot²)
-            if result == []
-                result = more
-            elseif more ≠ []
-                result = hcat(result, more)
-            end
+            more = more_limited_mappings(hcat(mapping, [guess]), tot, tot²)
+            result = vcat(result, more)
         end
         result
     end
 
-    mappings = more_limited_mappings(Int64[n_notes], 0.0, 0.0)
-    if mappings == []
-        # Transpose of an empty array gives a single element
-        Array{Array{Int64,2},1}()
-    else
-        [collect(transpose(mappings[:,i])) for i ∈ 1:size(mappings, 2)]
-    end
+    more_limited_mappings(Int64[n_notes], 0.0, 0.0)
 end
 
 function intrange(x, y)
