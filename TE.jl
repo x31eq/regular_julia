@@ -3,7 +3,7 @@ module TE
 using LinearAlgebra
 
 export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
-export limited_mappings
+export best_et, limited_mappings
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
 
@@ -17,6 +17,13 @@ rms_of_matrix(W) = prod(svdvals(W / √size(W, 2)))
 
 function optimal_badness(M)
     n_primes = size(M, 2)
+    MV = repeat(sum(M, dims=2), 1, n_primes)
+    rms_of_matrix(M - MV / n_primes)
+end
+
+function optimal_badness(M, limit)
+    n_primes = length(limit)
+    M = M ./ limit
     MV = repeat(sum(M, dims=2), 1, n_primes)
     rms_of_matrix(M - MV / n_primes)
 end
@@ -39,6 +46,20 @@ te_complexity(M, limit) = rms_of_matrix(M ./ limit)
 #
 # Equal temperament finding
 #
+
+function best_et(plimit, n_notes)
+    pet = prime_et(plimit, n_notes)
+    cap = optimal_badness(pet, plimit)
+    mappings = limited_mappings(n_notes, 0.0, cap, plimit)
+    if mappings == []
+        pet
+    else
+        sort!(mappings, by=m -> optimal_badness(m, plimit))
+        mappings[1]
+    end
+end
+
+prime_et(plimit, n_notes) = [Int64(round(n_notes * x)) for x in plimit]
 
 function limited_mappings(n_notes, ek, bmax, plimit)
     cap = bmax^2 * length(plimit) / plimit[1]^2

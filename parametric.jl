@@ -32,3 +32,6 @@ let plimit = limit(11)
     sort!(mappings, by=m -> cangwu(1/1200, m, plimit))
     println(mappings)
 end
+println(best_et(limit(11), 31))
+println(best_et(limit(13), 58))
+println(best_et(limit(17), 12))
