@@ -22,5 +22,13 @@ println("Marvel badness ", cangwu(0, marvel, limit11))
 println("Magic 1-cent badness ", cangwu(1/1200, magic, limit11))
 println("Marvel 1-cent badness ", cangwu(1/1200, marvel, limit11))
 
-println(limited_mappings(12, 0.01, 0.3, limit(5)))
-println(limited_mappings(31, 0.01, 0.35, limit(11)))
+let plimit = limit(5)
+    mappings = limited_mappings(12, 0.01, 0.3, plimit)
+    sort!(mappings, by=m -> cangwu(1/1200, m, plimit))
+    println(mappings)
+end
+let plimit = limit(11)
+    mappings = limited_mappings(31, 0.01, 0.35, plimit)
+    sort!(mappings, by=m -> cangwu(1/1200, m, plimit))
+    println(mappings)
+end
