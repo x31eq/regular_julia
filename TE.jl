@@ -6,6 +6,7 @@ export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
 export best_et, get_equal_temperaments, limited_mappings
 
 const primes = [2 3 5 7 11 13 17 19 23 29 31]
+const MappingList = Array{Array{Int64,2},1}
 
 limit(n) = log2.(transpose(primes[primes .≤ n]))
 
@@ -62,7 +63,7 @@ function get_equal_temperaments(plimit, ek, n_results)
     bmax = badness(results[n_results])
 
     n_notes = 1
-    results = Array{Array{Int64,2},1}()
+    results = MappingList()
     while n_notes ≤ bmax/ek
         mappings = limited_mappings(n_notes, ek, bmax, plimit)
         if mappings ≠ []
@@ -107,7 +108,7 @@ function limited_mappings(n_notes, ek, bmax, plimit)
         tot² += weighted_size^2
         λ = 1 - ε²
 
-        result = Array{Array{Int64,2},1}()
+        result = MappingList()
         toti = tot * λ / (i + ε²)
         error² = tot² - tot * toti
         if error² ≥ cap
@@ -118,7 +119,7 @@ function limited_mappings(n_notes, ek, bmax, plimit)
         xmin = target * (toti - deficit)
         xmax = target * (toti + deficit)
 
-        result = Array{Array{Int64,2},1}()
+        result = MappingList()
         for guess in intrange(xmin, xmax)
             more = more_limited_mappings(hcat(mapping, [guess]), tot, tot²)
             result = vcat(result, more)
