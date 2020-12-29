@@ -3,7 +3,8 @@ module TE
 using LinearAlgebra
 
 export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
-export best_et, get_equal_temperaments, limited_mappings
+export get_equal_temperaments, get_linear_temperaments
+export best_et, limited_mappings
 
 const MappingArray = Array{Int64,2}
 const TuningArray = Array{Float64,2}
@@ -134,6 +135,28 @@ function limited_mappings(
     end
 
     more_limited_mappings(reshape([n_notes], (1, 1)), 0.0, 0.0)
+end
+
+#
+# Regular temperament finding
+#
+
+function get_linear_temperaments(
+        plimit::TuningArray, ek::Float64,
+        ets::MappingList, n_results::Int64)::MappingList
+    rts = MappingList()
+    for i ∈ 1:(length(ets) - 1)
+        for j ∈ (i+1):length(ets)
+            push!(rts, vcat(ets[i], ets[j]))
+        end
+    end
+    badness(m) = cangwu(ek, m, plimit)
+    sort!(rts, by=badness)
+    if length(rts) > n_results
+        rts[1:n_results]
+    else
+        rts
+    end
 end
 
 #

@@ -39,3 +39,6 @@ println(best_et(limit(17), 12))
 println(get_equal_temperaments(limit(5), 0.01, 1))
 println(get_equal_temperaments(limit(11), 0.001, 10))
 println(get_equal_temperaments(limit(31), 0.001, 3))
+
+ets = get_equal_temperaments(limit(11), 0.001, 10)
+println(get_linear_temperaments(limit(11), 0.001, ets, 10))
