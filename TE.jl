@@ -165,15 +165,10 @@ function higher_rank(
         n_results::Int64)::MappingList
     rts = MappingList()
     for et in ets
-        etvec = vec(et)
         for rt in oldrts
-            # Rudimentary tautology filter
-            if !any(etvec == rt[i,:] for i ∈ 1:size(rt, 1))
-                newrt = vcat(et, rt)
-                # Better tautology filter; det returns imprecise floats
-                if ! (-0.1 < det(newrt * transpose(newrt)) < 0.1)
-                    push!(rts, vcat(et, rt))
-                end
+            newrt = vcat(et, rt)
+            if rank(newrt) > rank(rt)
+                push!(rts, vcat(et, rt))
             end
         end
     end
