@@ -3,7 +3,7 @@ module TE
 using LinearAlgebra
 
 export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
-export get_equal_temperaments, get_linear_temperaments
+export get_equal_temperaments, get_linear_temperaments, higher_rank
 export best_et, limited_mappings
 
 const MappingArray = Array{Int64,2}
@@ -148,6 +148,33 @@ function get_linear_temperaments(
     for i ∈ 1:(length(ets) - 1)
         for j ∈ (i+1):length(ets)
             push!(rts, vcat(ets[i], ets[j]))
+        end
+    end
+    badness(m) = cangwu(ek, m, plimit)
+    sort!(rts, by=badness)
+    if length(rts) > n_results
+        rts[1:n_results]
+    else
+        rts
+    end
+end
+
+function higher_rank(
+        plimit::TuningArray, ek::Float64,
+        ets::MappingList, oldrts::MappingList,
+        n_results::Int64)::MappingList
+    rts = MappingList()
+    for et in ets
+        etvec = vec(et)
+        for rt in oldrts
+            # Rudimentary tautology filter
+            if !any(etvec == rt[i,:] for i ∈ 1:size(rt, 1))
+                newrt = vcat(et, rt)
+                # Better tautology filter; det returns imprecise floats
+                if ! (-0.1 < det(newrt * transpose(newrt)) < 0.1)
+                    push!(rts, vcat(et, rt))
+                end
+            end
         end
     end
     badness(m) = cangwu(ek, m, plimit)
