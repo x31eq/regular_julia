@@ -5,12 +5,11 @@ using LinearAlgebra
 export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
 export best_et, get_equal_temperaments, limited_mappings
 
-const primes = [2 3 5 7 11 13 17 19 23 29 31]
 const MappingArray = Array{Int64,2}
 const TuningArray = Array{Float64,2}
 const MappingList = Array{MappingArray,1}
 
-limit(n::Int64)::TuningArray = log2.(transpose(primes[primes .≤ n]))
+limit(n::Int64)::TuningArray = log2.(transpose(primes(n)))
 
 #
 # Calculations on known mappings
@@ -135,6 +134,21 @@ function limited_mappings(
     end
 
     more_limited_mappings(reshape([n_notes], (1, 1)), 0.0, 0.0)
+end
+
+#
+# Utilities
+#
+
+# Based on https://riptutorial.com/julia-lang/example/13313/sieve-of-eratosthenes
+function primes(n::Int64)
+    P = Int64[]
+    for i ∈ 2:n
+        if !any(x -> i % x == 0, P)
+            push!(P, i)
+        end
+    end
+    P
 end
 
 intrange(x::Float64, y::Float64)::Array{Int64,1} =
