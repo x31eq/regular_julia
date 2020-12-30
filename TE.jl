@@ -4,7 +4,7 @@ using LinearAlgebra
 
 export limit, rms_of_matrix, te_complexity, optimal_badness, cangwu
 export get_equal_temperaments, get_linear_temperaments, higher_rank
-export best_et, limited_mappings
+export temperament, best_et, limited_mappings
 
 const MappingArray = Array{Int64,2}
 const TuningArray = Array{Float64,2}
@@ -140,6 +140,12 @@ end
 #
 # Regular temperament finding
 #
+
+temperament(plimit::TuningArray, octaves::Int64...)::MappingArray =
+    vcat([best_et(plimit, n) for n in octaves]...)
+
+temperament(max_prime::Int64, octaves::Int64...)::MappingArray =
+    temperament(limit(max_prime), octaves...)
 
 function get_linear_temperaments(
         plimit::TuningArray, ek::Float64,
