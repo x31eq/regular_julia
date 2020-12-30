@@ -1,0 +1,46 @@
+This repository has code for working with regular temperaments in Julia.
+It's not of any use in itself because I already wrote the same things in
+Python and Rust.  I wrote it to learn Julia.  I'm using version 1.0.3, which
+happens to come with Debian.  It's old now.  Maybe some of the problems I
+had are already fixed in the latest version, or will be fixed by the time
+you read this.  Anyway, this is what I found:
+
+Firstly, simple things are disappointingly slow.  It looks like the
+functions are getting compiled every time, although the modules are supposed
+to be precompiled.  It gets more reasonable for harder problems, which are
+mostly artificial for this use case, so it looks like the compiler's doing
+its job.  Because of the way things are compiled, interactive sessions work,
+but there's no option to compile to a binary, even with all the types
+declared, and that rules out some use cases.
+
+As a language, Julia is all built around arrays, bit like Fortran.  It seems
+to be missing associative arrays, but the comparison with Python doesn't
+mention this so I might be missing something.  You can use arrays like
+lists, and keep appending to them.  There's a "push!" function that works
+for appending … sometimes, but it doesn't work with all types, and I can't
+find the documentation to learn how to use it better.  I've had quite a bit
+of trouble working out the correct way of defining an empty array so that I
+can concatenate other objects onto it.  I use arrays with equal temperament
+mappings as rows although Julia has column-major arrays that might be more
+efficient the other way around, but the libraries aren't symmetric around
+rows and columns so I stuck with rows.  This all adds up to a few too many
+annoyances with the central container that everything's built around.
+
+There's a built-in linear algebra library, which is useful.  It wraps
+LAPACK, and so compares with less-standard libraries for other languages.
+It's missing the integer-specific support that Pari has, and that is also
+useful here.  As a result, there's no invariant for a temperament class and
+so there are duplicates in the output.  I could implement hermite reduction
+but I already spent a lot of time on this and I think it's time to stop.  I
+could also use the singular value decomposition (SVD) library.  svd(A).V is
+nearly the same for row-equivalent matrices.  (If you prefer
+column-equivalence, like Julia sort-of does, then go for svd(A).S)  Sometimes
+the signs of a column come out different, so you have to normalize.  But the
+big problem is that this is floating point, and the numbers are only
+consistent to a few significant figures, so I don't know how to get a
+reliable distinct invariant out of it.
+
+In conclusion, if you want to do regular temperament theory with Julia you
+might find this code useful.  I can't see any use case that would lead me to
+use Julia in the future, as the startup time makes it useless for CGI and it
+won't produce small, efficient binaries.  Still, it isn't that bad.
